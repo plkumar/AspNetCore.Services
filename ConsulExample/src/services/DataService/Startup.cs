@@ -52,6 +52,11 @@ namespace DataService
 
             app.UseMvc();
 
+            app.Use(next=>async context =>{
+                Console.WriteLine(context.Request.Path);
+                await next(context);
+            } );
+
             // Autoregister using server.Features (does not work in reverse proxy mode)
             app.UseConsulRegisterService();
         }
