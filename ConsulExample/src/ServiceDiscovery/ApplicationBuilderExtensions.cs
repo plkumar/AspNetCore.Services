@@ -15,7 +15,7 @@ namespace DataService
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseConsulRegisterService(this IApplicationBuilder app)
+        public static IApplicationBuilder UseConsulRegisterService(this IApplicationBuilder app, bool enableFabio = false)
         {
             var appLife = app.ApplicationServices.GetRequiredService<IApplicationLifetime>() ?? throw new ArgumentException("Missing dependency", nameof(IApplicationLifetime));
             var serviceOptions = app.ApplicationServices.GetRequiredService<IOptions<ServiceDisvoveryOptions>>() ?? throw new ArgumentException("Missing dependency", nameof(IOptions<ServiceDisvoveryOptions>));
@@ -75,7 +75,7 @@ namespace DataService
                     ID = serviceId,
                     Name = serviceOptions.Value.ServiceName,
                     Port = address.Port,
-                    Tags = new [] {$"urlprefix-/{serviceOptions.Value.ServiceName.ToLower()}"}
+                    Tags = enableFabio ? new[] { $"urlprefix-/{serviceOptions.Value.ServiceName.ToLower()}" } : new[] {$"{serviceOptions.Value.ServiceName.ToLower()}" }
                 };
 
                 consul.Agent.ServiceRegister(registration).GetAwaiter().GetResult();

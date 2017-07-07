@@ -58,7 +58,7 @@ namespace DataService
             } );
 
             // Autoregister using server.Features (does not work in reverse proxy mode)
-            app.UseConsulRegisterService();
+            app.UseConsulRegisterService(true);
         }
     }
 }
